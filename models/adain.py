@@ -166,3 +166,20 @@ def style_transfer(vgg, decoder, content, style, alpha=1.0,
         feat = adain(content_f, style_f)
     feat = feat * alpha + content_f * (1 - alpha)
     return decoder(feat)
+
+def adain_init(device = 'cuda'):
+    decoder_adain = decoder
+    vgg_adain = vgg
+
+    decoder_adain.eval()
+    vgg_adain.eval()
+
+    decoder_adain.load_state_dict(torch.load('models_weights/decoder.pth'))
+    vgg_adain.load_state_dict(torch.load('models_weights/vgg_normalised.pth'))
+    vgg_adain = nn.Sequential(*list(vgg_adain.children())[:31])
+
+    vgg_adain.to(device)
+    decoder_adain.to(device)
+
+    net_adain = Net(vgg_adain, decoder_adain).to(device).eval()
+    return vgg_adain, decoder_adain, net_adain

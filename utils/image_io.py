@@ -25,6 +25,6 @@ transform = transforms.Compose([
     transforms.ToTensor()
 ])
 
-def load_image(image_bytes, device='cuda'):
+def load_image(image_bytes):
     image = Image.open(BytesIO(image_bytes)).convert("RGB")
-    return transform(image).unsqueeze(0).to(device)
+    return transform(image)
