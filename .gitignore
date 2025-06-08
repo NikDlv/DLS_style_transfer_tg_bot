@@ -2,6 +2,7 @@
 .env
 config.py
 config.json
+user_data/
 secrets/
 *.key
 

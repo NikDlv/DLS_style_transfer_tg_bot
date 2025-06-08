@@ -1,6 +1,6 @@
 import torch
 import torch.nn as nn
-from .functional import calc_mean_std, adain
+from .adain_utils import calc_mean_std, adaptive_instance_normalization
 
 decoder = nn.Sequential(
     nn.ReflectionPad2d((1, 1, 1, 1)),
@@ -138,7 +138,7 @@ class Net(nn.Module):
         assert 0 <= alpha <= 1
         style_feats = self.encode_with_intermediate(style)
         content_feat = self.encode(content)
-        t = adain(content_feat, style_feats[-1])
+        t = adaptive_instance_normalization(content_feat, style_feats[-1])
         t = alpha * t + (1 - alpha) * content_feat
 
         g_t = self.decoder(t)
@@ -149,37 +149,3 @@ class Net(nn.Module):
         for i in range(1, 4):
             loss_s += self.calc_style_loss(g_t_feats[i], style_feats[i])
         return loss_c, loss_s
-    
-def style_transfer(vgg, decoder, content, style, alpha=1.0,
-                   interpolation_weights=None, device='cuda'):
-    assert (0.0 <= alpha <= 1.0)
-    content_f = vgg(content)
-    style_f = vgg(style)
-    if interpolation_weights:
-        _, C, H, W = content_f.size()
-        feat = torch.FloatTensor(1, C, H, W).zero_().to(device)
-        base_feat = adain(content_f, style_f)
-        for i, w in enumerate(interpolation_weights):
-            feat = feat + w * base_feat[i:i + 1]
-        content_f = content_f[0:1]
-    else:
-        feat = adain(content_f, style_f)
-    feat = feat * alpha + content_f * (1 - alpha)
-    return decoder(feat)
-
-def adain_init(device = 'cuda'):
-    decoder_adain = decoder
-    vgg_adain = vgg
-
-    decoder_adain.eval()
-    vgg_adain.eval()
-
-    decoder_adain.load_state_dict(torch.load('models_weights/decoder.pth'))
-    vgg_adain.load_state_dict(torch.load('models_weights/vgg_normalised.pth'))
-    vgg_adain = nn.Sequential(*list(vgg_adain.children())[:31])
-
-    vgg_adain.to(device)
-    decoder_adain.to(device)
-
-    net_adain = Net(vgg_adain, decoder_adain).to(device).eval()
-    return vgg_adain, decoder_adain, net_adain

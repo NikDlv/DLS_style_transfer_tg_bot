@@ -10,7 +10,7 @@ def calc_mean_std(feat, eps=1e-5):
     return feat_mean, feat_std
 
 
-def adain(content_feat, style_feat):
+def adaptive_instance_normalization(content_feat, style_feat):
     assert (content_feat.size()[:2] == style_feat.size()[:2])
     size = content_feat.size()
     style_mean, style_std = calc_mean_std(style_feat)
@@ -63,3 +63,20 @@ def coral(source, target):
                         target_f_mean.expand_as(source_f_norm)
 
     return source_f_transfer.view(source.size())
+
+def style_transfer(vgg, decoder, content, style, alpha=1.0,
+                   interpolation_weights=None, device='cuda'):
+    assert (0.0 <= alpha <= 1.0)
+    content_f = vgg(content)
+    style_f = vgg(style)
+    if interpolation_weights:
+        _, C, H, W = content_f.size()
+        feat = torch.FloatTensor(1, C, H, W).zero_().to(device)
+        base_feat = adaptive_instance_normalization(content_f, style_f)
+        for i, w in enumerate(interpolation_weights):
+            feat = feat + w * base_feat[i:i + 1]
+        content_f = content_f[0:1]
+    else:
+        feat = adaptive_instance_normalization(content_f, style_f)
+    feat = feat * alpha + content_f * (1 - alpha)
+    return decoder(feat)
