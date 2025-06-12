@@ -1,26 +1,40 @@
 import torch
 import torch.nn as nn
 from torchvision import transforms
-from models.adain_net import vgg, decoder, Net
-from models.adain_utils import coral, style_transfer
+from model.adain_net import Decoder, VGG, Net
+from model.adain_utils import coral, style_transfer
 from utils.image_io import load_image
 
 def init_model():
     """Initialize and load style transfer model"""
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    decoder_model = decoder
-    vgg_model = vgg
+    decoder = Decoder()
+    vgg = VGG()
 
     # Load weights
-    decoder_model.load_state_dict(torch.load('models_weights/decoder.pth'))
-    vgg_model.load_state_dict(torch.load('models_weights/vgg_normalised.pth'))
+    decoder.model.load_state_dict(torch.load('model_weights/decoder.pth'))
+    vgg.model.load_state_dict(torch.load('model_weights/vgg_normalised.pth'))
     
     # Configure models
-    vgg_model = nn.Sequential(*list(vgg_model.children())[:31])
-    vgg_model.to(device).eval()
-    decoder_model.to(device).eval()
+    vgg = nn.Sequential(*list(vgg.model.children())[:31])
+    vgg.to(device).eval()
+    decoder.to(device).eval()
+
+    decoder_picasso = Decoder()
+    decoder_van_gogh = Decoder()
+    decoder_monet = Decoder()
+
+    decoder_picasso.load_state_dict(torch.load('model_weights/decoder_picasso.pth'))
+    decoder_van_gogh.load_state_dict(torch.load('model_weights/decoder_van_gogh.pth'))
+    decoder_monet.load_state_dict(torch.load('model_weights/decoder_monet.pth'))
+
+    decoder_picasso.to(device).eval()
+    decoder_van_gogh.to(device).eval()
+    decoder_monet.to(device).eval()
+
     
-    return Net(vgg_model, decoder_model).to(device).eval()
+    return Net(vgg, decoder).to(device).eval(), Net(vgg, decoder_picasso).to(device).eval(), \
+           Net(vgg, decoder_van_gogh).to(device).eval(), Net(vgg, decoder_monet).to(device).eval()
 
 def process_images(net, content_bytes, style_bytes, alpha, preserve_colors=False):
     """Perform style transfer on image bytes"""

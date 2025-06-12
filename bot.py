@@ -184,8 +184,22 @@ async def perform_style_transfer(update: Update, context: ContextTypes.DEFAULT_T
         preserve_colors = (user_data.get('mode') == 'color_preserving')
         alpha = get_user_settings(user_data_store, user_id).get("alpha", 1.0)
 
+        # Default to general style net
+        style_net = context.bot_data['net']
+
+        # If user selected a predefined style, use the corresponding model
+        if user_data.get('mode') == 'selected_style':
+            selected_path = user_data.get('selected_style_path', '').lower()
+            if 'picasso' in selected_path:
+                style_net = context.bot_data.get('net_picasso', style_net)
+            elif 'van_gogh' in selected_path:
+                style_net = context.bot_data.get('net_van_gogh', style_net)
+            elif 'monet' in selected_path:
+                style_net = context.bot_data.get('net_monet', style_net)
+
+
         result_image = process_images(
-            net=context.bot_data['net'],
+            net=style_net,
             content_bytes=user_data['content_image'],
             style_bytes=user_data['style_image'],
             preserve_colors=preserve_colors,
@@ -220,13 +234,16 @@ async def perform_style_transfer(update: Update, context: ContextTypes.DEFAULT_T
 def main():
     """Starts the Telegram bot"""
     print("Initializing style transfer model...")
-    net = init_model()
+    net, net_picasso, net_van_gogh, net_monet = init_model()
 
     with open('config.json') as f:
         config = json.load(f)
 
     app = ApplicationBuilder().token(config['telegram_token']).build()
     app.bot_data['net'] = net
+    app.bot_data['net_picasso'] = net_picasso
+    app.bot_data['net_van_gogh'] = net_van_gogh
+    app.bot_data['net_monet'] = net_monet
 
     app.add_handler(CommandHandler("start", start))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
