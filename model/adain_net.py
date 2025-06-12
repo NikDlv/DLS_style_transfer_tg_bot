@@ -1,6 +1,6 @@
-import torch
 import torch.nn as nn
 from .adain_utils import calc_mean_std, adaptive_instance_normalization
+
 
 class Decoder(nn.Module):
     def __init__(self):
@@ -39,7 +39,8 @@ class Decoder(nn.Module):
 
     def forward(self, x):
         return self.model(x)
-    
+
+
 class VGG(nn.Module):
     def __init__(self):
         super(VGG, self).__init__()
@@ -143,8 +144,8 @@ class Net(nn.Module):
         assert (target.requires_grad is False)
         input_mean, input_std = calc_mean_std(input)
         target_mean, target_std = calc_mean_std(target)
-        return self.mse_loss(input_mean, target_mean) + \
-               self.mse_loss(input_std, target_std)
+        return (self.mse_loss(input_mean, target_mean) +
+                self.mse_loss(input_std, target_std))
 
     def forward(self, content, style, alpha=1.0):
         assert 0 <= alpha <= 1

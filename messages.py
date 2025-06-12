@@ -5,16 +5,16 @@ MESSAGES = {
 
 ✨ Choose one of the image generation options:
 
-1️⃣  **Style Transfer** 🎨  
+1️⃣  **Style Transfer** 🎨
 Apply a style from any image to your content photo while keeping the original composition.
 
-2️⃣  **Color-Preserving** 🌈  
+2️⃣  **Color-Preserving** 🌈
 Keep your original photo's colors while applying the style's textures and patterns.
 
-3️⃣  **Select a Style** 🖼️  
+3️⃣  **Select a Style** 🖼️
 Select a famous painting style (Van Gogh, Monet, Picasso) and apply it to your photo.
-           
-⚙️ You can also adjust the strength of the style transfer using the **"Set alpha"** command.  
+
+⚙️ You can also adjust the strength of the style transfer using the **"Set alpha"** command.
 Choose a value between 0 and 1 — higher values mean stronger stylization.
 
 🌐 To change the bot's language, use the **"Language"** command and select your preferred language.
@@ -22,7 +22,7 @@ Choose a value between 0 and 1 — higher values mean stronger stylization.
         "standard_instructions": """
 📌 Please follow these steps:
 
-1️⃣ Send the *content* image first  
+1️⃣ Send the *content* image first
 2️⃣ Then send the *style* image
 
 💡 You can also send both images in one message!
@@ -51,16 +51,16 @@ Choose a value between 0 and 1 — higher values mean stronger stylization.
 
 ✨ Выберите один из вариантов:
 
-1️⃣  **Перенос стиля** 🎨  
+1️⃣  **Перенос стиля** 🎨
 Примените стиль из любого изображения к вашему фото, сохранив оригинальную композицию.
 
-2️⃣  **Сохранение цветов** 🌈  
+2️⃣  **Сохранение цветов** 🌈
 Сохраните оригинальные цвета вашего фото, применяя только текстуры и паттерны стиля.
 
-3️⃣  **Выбрать готовый стиль** 🖼️  
+3️⃣  **Выбрать готовый стиль** 🖼️
 Выберите стиль известного художника (Ван Гог, Моне, Пикассо) и примените его к своей фотографии.
 
-⚙️ Вы также можете настроить силу переноса стиля с помощью команды **"Установить alpha"**.  
+⚙️ Вы также можете настроить силу переноса стиля с помощью команды **"Установить alpha"**.
 Укажите значение от 0 до 1 — чем больше значение, тем сильнее эффект стилизации.
 
 🌐 Чтобы изменить язык бота, используйте команду **"Язык"** и выберите предпочитаемый язык.
@@ -68,7 +68,7 @@ Choose a value between 0 and 1 — higher values mean stronger stylization.
         "standard_instructions": """
 📌 Инструкция:
 
-1️⃣ Сначала отправьте *контентное* изображение  
+1️⃣ Сначала отправьте *контентное* изображение
 2️⃣ Затем отправьте *стилевое* изображение
 
 💡 Можно отправить оба изображения одним сообщением!
@@ -91,6 +91,7 @@ Choose a value between 0 and 1 — higher values mean stronger stylization.
         "choose_option": "📋 Выберите опцию из списка."
     }
 }
+
 
 def get_message(key, lang='en'):
     """Retrieve a localized message by key and language code."""

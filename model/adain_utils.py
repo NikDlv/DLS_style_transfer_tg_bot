@@ -1,4 +1,6 @@
 import torch
+
+
 def calc_mean_std(feat, eps=1e-5):
     # eps is a small value added to the variance to avoid divide-by-zero.
     size = feat.size()
@@ -58,11 +60,12 @@ def coral(source, target):
                  source_f_norm)
     )
 
-    source_f_transfer = source_f_norm_transfer * \
-                        target_f_std.expand_as(source_f_norm) + \
-                        target_f_mean.expand_as(source_f_norm)
+    source_f_transfer = (source_f_norm_transfer *
+                         target_f_std.expand_as(source_f_norm) +
+                         target_f_mean.expand_as(source_f_norm))
 
     return source_f_transfer.view(source.size())
+
 
 def style_transfer(vgg, decoder, content, style, alpha):
     assert (0.0 <= alpha <= 1.0)

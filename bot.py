@@ -11,7 +11,8 @@ import json
 
 from messages import get_message
 from style_transfer import init_model, process_images
-from user_storage import load_user_data, update_user_settings, get_user_settings, save_user_images
+from user_storage import (load_user_data, update_user_settings,
+                          get_user_settings, save_user_images)
 
 # Preload user data and models
 user_data_store = load_user_data()
@@ -34,20 +35,26 @@ PRE_SAVED_STYLES = {
 # --- Keyboard Helpers ---
 
 def get_language_keyboard():
-    return ReplyKeyboardMarkup([["English", "Русский"]], one_time_keyboard=True, resize_keyboard=True)
+    return ReplyKeyboardMarkup([["English", "Русский"]],
+                               one_time_keyboard=True, resize_keyboard=True)
+
 
 def get_styles_keyboard(lang='en'):
     styles = list(PRE_SAVED_STYLES.keys())
     keyboard = [styles[i:i+2] for i in range(0, len(styles), 2)]
-    return ReplyKeyboardMarkup(keyboard, one_time_keyboard=True, resize_keyboard=True)
+    return ReplyKeyboardMarkup(keyboard, one_time_keyboard=True,
+                               resize_keyboard=True)
+
 
 def get_keyboard(lang='en'):
-    return ReplyKeyboardMarkup(KEYBOARD_OPTIONS.get(lang, KEYBOARD_OPTIONS['en']),
-                                one_time_keyboard=True,
-                                resize_keyboard=True)
-
+    return ReplyKeyboardMarkup(
+        KEYBOARD_OPTIONS.get(lang, KEYBOARD_OPTIONS['en']),
+        one_time_keyboard=True,
+        resize_keyboard=True
+    )
 
 # --- Command Handlers ---
+
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Handles /start command"""
@@ -76,7 +83,8 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Handles all non-command text messages"""
     user_id = str(update.effective_user.id)
     user_data = context.user_data
-    lang = user_data.get('lang') or get_user_settings(user_data_store, user_id).get('lang', 'en')
+    lang = (user_data.get('lang') or
+            get_user_settings(user_data_store, user_id).get('lang', 'en'))
     user_data['lang'] = lang
     text = update.message.text
     keyboard = KEYBOARD_OPTIONS.get(lang, KEYBOARD_OPTIONS['en'])
@@ -119,7 +127,8 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         user_data['mode'] = 'color_preserving'
         await update.message.reply_text(get_message("standard_instructions", lang), parse_mode="Markdown")
     elif text == keyboard[0][2]:  # Select Style
-        await update.message.reply_text(get_message("choose_style_prompt", lang), reply_markup=get_styles_keyboard(lang))
+        await update.message.reply_text(get_message("choose_style_prompt", lang),
+                                        reply_markup=get_styles_keyboard(lang))
     elif text in PRE_SAVED_STYLES:  # Pre-saved style selected
         user_data['selected_style_path'] = PRE_SAVED_STYLES[text]
         user_data['mode'] = 'selected_style'
@@ -196,7 +205,6 @@ async def perform_style_transfer(update: Update, context: ContextTypes.DEFAULT_T
                 style_net = context.bot_data.get('net_van_gogh', style_net)
             elif 'monet' in selected_path:
                 style_net = context.bot_data.get('net_monet', style_net)
-
 
         result_image = process_images(
             net=style_net,

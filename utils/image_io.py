@@ -7,6 +7,7 @@ transform = transforms.Compose([
     transforms.ToTensor()
 ])
 
+
 def load_image(image_bytes):
     image = Image.open(BytesIO(image_bytes)).convert("RGB")
     return transform(image)
