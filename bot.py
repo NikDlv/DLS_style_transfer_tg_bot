@@ -5,14 +5,15 @@ from telegram.ext import (
     CommandHandler,
     MessageHandler,
     ContextTypes,
-    filters,
+    filters
 )
 import json
 
-from messages import get_message
-from style_transfer import init_model, process_images
-from user_storage import (load_user_data, update_user_settings,
-                          get_user_settings, save_user_images)
+from utils.messages import get_message
+from model.adain_utils import process_images
+from utils.functional import init_model
+from utils.user_storage import (load_user_data, update_user_settings,
+                                get_user_settings, save_user_images)
 
 # Preload user data and models
 user_data_store = load_user_data()

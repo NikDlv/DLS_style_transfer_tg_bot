@@ -1,4 +1,6 @@
 import torch
+from utils.image_io import load_image
+from torchvision import transforms
 
 
 def calc_mean_std(feat, eps=1e-5):
@@ -74,3 +76,32 @@ def style_transfer(vgg, decoder, content, style, alpha):
     feat = adaptive_instance_normalization(content_f, style_f)
     feat = feat * alpha + content_f * (1 - alpha)
     return decoder(feat)
+
+
+def process_images(net, content_bytes, style_bytes, alpha, preserve_colors=False):
+    """Perform style transfer on image bytes"""
+    content = load_image(content_bytes)
+    style = load_image(style_bytes)
+
+    # Apply color preservation if needed
+    if preserve_colors:
+        style = coral(style, content)
+
+    # Move to GPU and add batch dimension
+    device = next(net.parameters()).device
+    content = content.to(device).unsqueeze(0)
+    style = style.to(device).unsqueeze(0)
+
+    # Perform style transfer
+    with torch.no_grad():
+        output = style_transfer(
+            net.encode,
+            net.decoder,
+            content,
+            style,
+            alpha=alpha
+        )
+
+    # Convert to PIL image
+    output = output.clamp(0, 1)
+    return transforms.ToPILImage()(output.squeeze(0).cpu())
