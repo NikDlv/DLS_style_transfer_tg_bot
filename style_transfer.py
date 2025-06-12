@@ -12,8 +12,8 @@ def init_model():
     vgg = VGG()
 
     # Load weights
-    decoder.model.load_state_dict(torch.load('model_weights/decoder.pth'))
-    vgg.model.load_state_dict(torch.load('model_weights/vgg_normalised.pth'))
+    decoder.model.load_state_dict(torch.load('model_weights/decoder.pth', map_location=device))
+    vgg.model.load_state_dict(torch.load('model_weights/vgg_normalised.pth', map_location=device))
     
     # Configure models
     vgg = nn.Sequential(*list(vgg.model.children())[:31])
@@ -24,9 +24,9 @@ def init_model():
     decoder_van_gogh = Decoder()
     decoder_monet = Decoder()
 
-    decoder_picasso.load_state_dict(torch.load('model_weights/decoder_picasso.pth'))
-    decoder_van_gogh.load_state_dict(torch.load('model_weights/decoder_van_gogh.pth'))
-    decoder_monet.load_state_dict(torch.load('model_weights/decoder_monet.pth'))
+    decoder_picasso.load_state_dict(torch.load('model_weights/decoder_picasso.pth', map_location=device))
+    decoder_van_gogh.load_state_dict(torch.load('model_weights/decoder_van_gogh.pth', map_location=device))
+    decoder_monet.load_state_dict(torch.load('model_weights/decoder_monet.pth', map_location=device))
 
     decoder_picasso.to(device).eval()
     decoder_van_gogh.to(device).eval()

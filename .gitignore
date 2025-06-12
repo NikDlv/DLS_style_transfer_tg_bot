@@ -4,6 +4,7 @@ config.py
 config.json
 user_data/
 secrets/
+style_transfer/
 *.key
 
 # Python

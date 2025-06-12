@@ -64,19 +64,10 @@ def coral(source, target):
 
     return source_f_transfer.view(source.size())
 
-def style_transfer(vgg, decoder, content, style, alpha=1.0,
-                   interpolation_weights=None, device='cuda'):
+def style_transfer(vgg, decoder, content, style, alpha):
     assert (0.0 <= alpha <= 1.0)
     content_f = vgg(content)
     style_f = vgg(style)
-    if interpolation_weights:
-        _, C, H, W = content_f.size()
-        feat = torch.FloatTensor(1, C, H, W).zero_().to(device)
-        base_feat = adaptive_instance_normalization(content_f, style_f)
-        for i, w in enumerate(interpolation_weights):
-            feat = feat + w * base_feat[i:i + 1]
-        content_f = content_f[0:1]
-    else:
-        feat = adaptive_instance_normalization(content_f, style_f)
+    feat = adaptive_instance_normalization(content_f, style_f)
     feat = feat * alpha + content_f * (1 - alpha)
     return decoder(feat)
