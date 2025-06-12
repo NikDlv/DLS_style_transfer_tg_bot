@@ -13,6 +13,23 @@ This repository hosts the code for a Telegram bot that performs image style tran
 
 ## Examples
 
+**Bot welcome message:**  
+![Bot Welcome](test_images/bot_interface.png)
+
+**Style transfer example:**  
+![Style Transfer](test_images/bot_transfer.png)
+
+**Style transfer with pretrained Van Gogh style:**  
+![Van Gogh Style](test_images/bot_van_gogh.png)
+## Project Structure
+
+- `bot.py` — main Telegram bot script  
+- `model/` — model architecture and related code  
+- `model_weights/` — pretrained model weights files  
+- `utils/` — utility functions  
+- `tests/` — automated tests  
+- `train/` — scripts to retrain or fine-tune the models if needed.  
+- `test_images/` — sample images   
 
 ## Installation 
 ### Requirements
@@ -70,6 +87,11 @@ You can now proceed with either the standard installation or the Docker-based se
     - `Color-Preserving`: Same as above, but the result retains the original colors of the content image.
     - `Select a Style`: Choose from predefined styles — Van Gogh, Monet, or Picasso. Then send a single content image.
 4. You can set the `alpha` parameter (between 0 and 1), which controls the strength of the stylization.
+
+## Additional Information
+
+- The bot saves content and style images for each user in the `user_data/` folder.  
+- The `train/` folder contains Python notebooks used for fine-tuning the model.
 
 ## License
 

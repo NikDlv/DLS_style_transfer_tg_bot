@@ -1,5 +1,5 @@
 import pytest
-from utils.style_transfer import init_model
+from utils.functional import init_model
 
 
 def test_init_model():
