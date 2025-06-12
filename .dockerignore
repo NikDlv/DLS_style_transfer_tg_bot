@@ -5,6 +5,7 @@
 # Ignore Python caches
 __pycache__
 *.pyc
+.pytest_cache
 
 # Ignore IDE files
 .vscode/

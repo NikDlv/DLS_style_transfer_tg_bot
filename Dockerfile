@@ -9,7 +9,8 @@ COPY . /bot
 
 # Install Python dependencies
 RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
+RUN pip install pillow
+RUN pip install python-telegram-bot
 
 # Run the bot
 CMD ["python", "bot.py"]

@@ -25,7 +25,11 @@ jobs:
         pip install torch torchvision
         pip install -r requirements.txt
         pip install pytest
-
+        pip install flake8
     - name: Run tests with pytest
       run: |
         pytest
+            
+    - name: Lint with flake8
+      run: |
+        flake8 .
