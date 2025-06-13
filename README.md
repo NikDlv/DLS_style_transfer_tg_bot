@@ -55,7 +55,7 @@ The installation has been tested on **Ubuntu 22.04 LTS**.
    ```
    You can obtain your API token by creating a bot through the official Telegram bot manager [@BotFather](https://t.me/BotFather).
 
-You can now proceed with either the standard installation or the Docker-based setup. The Docker setup uses an official PyTorch base image with CUDA support.
+You can now proceed with either the standard installation or the Docker-based setup.
 ### Standard Installation
 
 1. Install dependencies:
@@ -69,16 +69,17 @@ You can now proceed with either the standard installation or the Docker-based se
    ```
 
 ### Docker Installation
-
+This project uses an official NVIDIA CUDA Docker image based on Ubuntu 22.04. Depending on your system, you may need to adjust the `Dockerfile`.
 1. Build the Docker image:
     ```bash
-    docker build -t dls-style-transfer-bot .
+    sudo docker build -t dls-style-transfer-bot .
     ```
 
 2. Run the container:
     ```bash
-    docker run dls-style-transfer-bot
+    sudo docker run --gpus all dls-style-transfer-bot
     ```
+If you encounter issues with CUDA initialization, make sure the NVIDIA Container Toolkit is installed and properly configured. You can follow the instructions [here](https://docs.nvidia.com/metropolis/deepstream/dev-guide/text/DS_on_WSL2.html?_gl=1*8gi53*_gcl_au*OTA4NDA4NTYxLjE3MTEzMzAwMTI.#install-docker-engine-and-dependencies-inside-ubuntu) to install it.
 ## Usage
 1. Start the bot by sending the `/start` command in the chat. You will see a keyboard with available options.
 2. The bot automatically selects the language based on your Telegram settings. To change the language manually, use the `Language` option.
@@ -92,7 +93,7 @@ You can now proceed with either the standard installation or the Docker-based se
 
 - The bot saves content and style images for each user in the `user_data/` folder.  
 - The `train/` folder contains Python notebooks used for fine-tuning the model.
-- Model behavior is covered with automated tests using `pytest`.
+- Model behavior and Docker installation are covered with automated tests.
 - Code quality is maintained with `Flake8`.
 
 ## License

@@ -1,5 +1,9 @@
-# Use PyTorch + CUDA base image
-FROM pytorch/pytorch:2.2.2-cuda11.8-cudnn8-runtime
+# Use CUDA base image
+FROM nvidia/cuda:11.8.0-cudnn8-devel-ubuntu22.04
+
+# Install python
+RUN apt-get update && apt-get install -y python3 python3-pip && \
+    rm -rf /var/lib/apt/lists/*
 
 # Set working directory
 WORKDIR /bot
@@ -9,8 +13,12 @@ COPY . /bot
 
 # Install Python dependencies
 RUN pip install --upgrade pip
+RUN pip install torch torchvision 
 RUN pip install pillow
 RUN pip install python-telegram-bot
 
+# No output buffering
+ENV PYTHONUNBUFFERED=1
+
 # Run the bot
-CMD ["python", "bot.py"]
+CMD ["python3", "bot.py"]

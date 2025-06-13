@@ -6,6 +6,8 @@ from model.adain_net import Decoder, VGG, Net
 def init_model():
     """Initialize and load style transfer model"""
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    print("Using GPU:", torch.cuda.is_available())
+    print("GPU name:", torch.cuda.get_device_name(0) if torch.cuda.is_available() else "None")
     decoder = Decoder()
     vgg = VGG()
 

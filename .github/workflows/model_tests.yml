@@ -1,4 +1,4 @@
-name: CI Tests
+name: Model tests
 
 on:
   push:
