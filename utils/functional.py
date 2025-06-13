@@ -22,6 +22,7 @@ def init_model():
     decoder_van_gogh = Decoder()
     decoder_monet = Decoder()
 
+    # Load weights for fine-tuned models
     decoder_picasso.load_state_dict(torch.load('model_weights/decoder_picasso.pth', map_location=device))
     decoder_van_gogh.load_state_dict(torch.load('model_weights/decoder_van_gogh.pth', map_location=device))
     decoder_monet.load_state_dict(torch.load('model_weights/decoder_monet.pth', map_location=device))
@@ -31,4 +32,4 @@ def init_model():
     decoder_monet.to(device).eval()
 
     return (Net(vgg, decoder).to(device).eval(), Net(vgg, decoder_picasso).to(device).eval(),
-            Net(vgg, decoder_van_gogh).to(device).eval(), Net(vgg, decoder_monet).to(device).eval)
+            Net(vgg, decoder_van_gogh).to(device).eval(), Net(vgg, decoder_monet).to(device).eval())

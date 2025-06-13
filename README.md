@@ -1,6 +1,6 @@
 # DLS Style Transfer Telegram Bot
 
-This repository hosts the code for a Telegram bot that performs image style transfer in real time. It leverages the Adaptive Instance Normalization (AdaIN) network introduced in ["Arbitrary Style Transfer in Real-time with Adaptive Instance Normalization"](https://arxiv.org/abs/1703.06868) by Xun Huang and Serge Belongie. The implementation builds upon an excellent PyTorch port of AdaIN, available [here](https://github.com/naoto0804/pytorch-AdaIN?tab=readme-ov-file).
+This repository hosts the code for a Telegram bot that performs image style transfer in real time. It leverages the Adaptive Instance Normalization (AdaIN) network introduced in ["Arbitrary Style Transfer in Real-time with Adaptive Instance Normalization"](https://arxiv.org/abs/1703.06868) by Xun Huang and Serge Belongie. The implementation builds upon an excellent PyTorch port of AdaIN, available [here](https://github.com/naoto0804/pytorch-AdaIN?tab=readme-ov-file). This project was developed as the final project of Part 1 of the [Deep Learning School](https://dls.samcs.ru/) course.
 
 ## Key Features
 - **Telegram Bot Interface:** The model is integrated with the [python-telegram-bot](https://python-telegram-bot.org/) framework.
@@ -92,6 +92,8 @@ You can now proceed with either the standard installation or the Docker-based se
 
 - The bot saves content and style images for each user in the `user_data/` folder.  
 - The `train/` folder contains Python notebooks used for fine-tuning the model.
+- Model behavior is covered with automated tests using `pytest`.
+- Code quality is maintained with `Flake8`.
 
 ## License
 

@@ -3,6 +3,9 @@ from .adain_utils import calc_mean_std, adaptive_instance_normalization
 
 
 class Decoder(nn.Module):
+    """
+    Decoder network used to reconstruct an image from AdaIN features.
+    """
     def __init__(self):
         super(Decoder, self).__init__()
         self.model = nn.Sequential(
@@ -42,6 +45,10 @@ class Decoder(nn.Module):
 
 
 class VGG(nn.Module):
+    """
+    Modified VGG-19 encoder used to extract content and style features.
+    Includes convolutional layers up to relu4_1. Extra layers are present but not used.
+    """
     def __init__(self):
         super(VGG, self).__init__()
         self.model = nn.Sequential(
@@ -105,6 +112,9 @@ class VGG(nn.Module):
 
 
 class Net(nn.Module):
+    """
+    Style transfer network combining a fixed VGG encoder and a trainable decoder.
+    """
     def __init__(self, encoder, decoder):
         super(Net, self).__init__()
         enc_layers = list(encoder.children())
@@ -122,6 +132,12 @@ class Net(nn.Module):
 
     # extract relu1_1, relu2_1, relu3_1, relu4_1 from input image
     def encode_with_intermediate(self, input):
+        """
+        Extract intermediate features (relu1_1 to relu4_1) from the input image.
+
+        Returns:
+            List of feature maps at different VGG depths.
+        """
         results = [input]
         for i in range(4):
             func = getattr(self, 'enc_{:d}'.format(i + 1))
@@ -130,16 +146,34 @@ class Net(nn.Module):
 
     # extract relu4_1 from input image
     def encode(self, input):
+        """
+        Encode input image to relu4_1 feature map using the VGG encoder.
+
+        Returns:
+            Feature map after relu4_1.
+        """
         for i in range(4):
             input = getattr(self, 'enc_{:d}'.format(i + 1))(input)
         return input
 
     def calc_content_loss(self, input, target):
+        """
+        Compute content loss as MSE between generated and target feature maps.
+
+        Returns:
+            Scalar content loss.
+        """
         assert (input.size() == target.size())
         assert (target.requires_grad is False)
         return self.mse_loss(input, target)
 
     def calc_style_loss(self, input, target):
+        """
+        Compute style loss as the sum of MSE between mean and std of input and target.
+
+        Returns:
+            Scalar style loss.
+        """
         assert (input.size() == target.size())
         assert (target.requires_grad is False)
         input_mean, input_std = calc_mean_std(input)
@@ -148,6 +182,17 @@ class Net(nn.Module):
                 self.mse_loss(input_std, target_std))
 
     def forward(self, content, style, alpha=1.0):
+        """
+        Perform forward pass of the style transfer network.
+
+        Args:
+            content: content image tensor
+            style: style image tensor
+            alpha: interpolation factor between content and style features (0 to 1)
+
+        Returns:
+            Content loss and total style loss
+        """
         assert 0 <= alpha <= 1
         style_feats = self.encode_with_intermediate(style)
         content_feat = self.encode(content)

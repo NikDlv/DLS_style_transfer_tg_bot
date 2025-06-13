@@ -242,7 +242,7 @@ async def perform_style_transfer(update: Update, context: ContextTypes.DEFAULT_T
 
 def main():
     """Starts the Telegram bot"""
-    print("Initializing style transfer model...")
+    print("Initializing style transfer models...")
     net, net_picasso, net_van_gogh, net_monet = init_model()
 
     with open('config.json') as f:
