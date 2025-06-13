@@ -93,7 +93,7 @@ If you encounter issues with CUDA initialization, make sure the NVIDIA Container
 
 - The bot saves content and style images for each user in the `user_data/` folder.  
 - The `train/` folder contains Python notebooks used for fine-tuning the model.
-- Model behavior and Docker installation are covered with automated tests.
+- Model behavior is covered with automated tests.
 - Code quality is maintained with `Flake8`.
 
 ## License
