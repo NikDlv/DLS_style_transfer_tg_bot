@@ -28,8 +28,23 @@ This repository hosts the code for a Telegram bot that performs image style tran
 - `model_weights/` — pretrained model weights files  
 - `utils/` — utility functions  
 - `tests/` — automated tests  
-- `train/` — scripts to retrain or fine-tune the models if needed.  
+- `train/` — scripts used to train the models
 - `test_images/` — sample images   
+
+## Training
+
+The models were trained using the following configurations:
+
+1. **Arbitrary Style Transfer Model**  
+   Decoder was trained for 400 epochs with [COCO](https://cocodataset.org/#home) dataset as content images and [Painter by Numbers](https://www.kaggle.com/c/painter-by-numbers/data) dataset as style images.
+
+2. **Artist-Specific Models**  
+   Decoder was trained for individual painter styles (200 epochs each):
+   - **Van Gogh** style using *Starry Night*
+   - **Monet** style using *Water Lilies*
+   - **Picasso** style using *The Weeping Woman*
+
+Training notebooks with loss curves and style transfer samples are available in the `train/` directory.
 
 ## Installation 
 ### Requirements
@@ -92,7 +107,6 @@ If you encounter issues with CUDA initialization, make sure the NVIDIA Container
 ## Additional Information
 
 - The bot saves content and style images for each user in the `user_data/` folder.  
-- The `train/` folder contains Python notebooks used for fine-tuning the model.
 - Model behavior is covered with automated tests.
 - Code quality is maintained with `Flake8`.
 
