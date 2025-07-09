@@ -36,7 +36,9 @@ This repository hosts the code for a Telegram bot that performs image style tran
 The models were trained using the following configurations:
 
 1. **Arbitrary Style Transfer Model**  
-   Decoder was trained for 400 epochs with [COCO](https://cocodataset.org/#home) dataset as content images and [Painter by Numbers](https://www.kaggle.com/c/painter-by-numbers/data) dataset as style images.
+   Pre-trained decoder was taken from [this repository](https://github.com/naoto0804/pytorch-AdaIN?tab=readme-ov-file).
+
+   I trained my own decoder for 400 epochs with [COCO](https://cocodataset.org/#home) dataset as content images and [Painter by Numbers](https://www.kaggle.com/c/painter-by-numbers/data) dataset as style images. Unfortunately, the result was worth than the model from [here](https://github.com/naoto0804/pytorch-AdaIN?tab=readme-ov-file) and is not used in final project.
 
 2. **Artist-Specific Models**  
    Decoder was trained for individual painter styles (200 epochs each):

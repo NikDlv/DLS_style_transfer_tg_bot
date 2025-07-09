@@ -12,7 +12,7 @@ def init_model():
     vgg = VGG()
 
     # Load weights
-    decoder.load_state_dict(torch.load('model_weights/decoder.pth', map_location=device))
+    decoder.model.load_state_dict(torch.load('model_weights/decoder.pth', map_location=device))
     vgg.model.load_state_dict(torch.load('model_weights/vgg_normalised.pth', map_location=device))
 
     # Configure models
