@@ -10,15 +10,16 @@ USER_DATA_DIR = 'user_data'
 def load_user_data():
     # Create directory if it doesn't exist
     os.makedirs(os.path.dirname(USER_DATA_FILE), exist_ok=True)
-    
+
     # Create file with empty dict if it doesn't exist
     if not os.path.exists(USER_DATA_FILE):
         with open(USER_DATA_FILE, "w", encoding="utf-8") as f:
             json.dump({}, f)
-    
+
     # Read and return the data
     with open(USER_DATA_FILE, "r", encoding="utf-8") as f:
         return json.load(f)
+
 
 def save_user_data(data):
     with open(USER_DATA_FILE, "w", encoding="utf-8") as f:
